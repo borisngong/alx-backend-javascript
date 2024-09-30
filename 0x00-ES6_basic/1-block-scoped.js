@@ -1,14 +1,11 @@
 export default function taskBlock(trueOrFalse) {
-  const task = false;  // Use const since they shouldn't be reassigned
-  const task2 = true;
+  const task = false;  // Original value
+  const task2 = true;  // Original value
 
   if (trueOrFalse) {
-    // Instead of reassigning, declare new variables inside the block
-    const task = true;
-    const task2 = false;
-    return [task, task2]; // Return the values if trueOrFalse is true
+    // Reassign the values without redeclaring
+    return [true, false];  // Return values when trueOrFalse is true
   }
 
-  return [task, task2];  // Return the original values if trueOrFalse is false
+  return [task, task2];  // Return original values when false
 }
-
