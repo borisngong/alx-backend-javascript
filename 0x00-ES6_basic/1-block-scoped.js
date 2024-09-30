@@ -1,11 +1,12 @@
 export default function taskBlock(trueOrFalse) {
-  const task = false;  // Original value
-  const task2 = true;  // Original value
+  let task = false;  // Use let to ensure block scope
+  let task2 = true;  // Use let to ensure block scope
 
   if (trueOrFalse) {
-    // Reassign the values without redeclaring
-    return [true, false];  // Return values when trueOrFalse is true
+    let task = true;   // This task is scoped to the if block
+    let task2 = false; // This task2 is scoped to the if block
   }
 
-  return [task, task2];  // Return original values when false
+  return [task, task2]; // The original task and task2 from outside the if block
 }
+
