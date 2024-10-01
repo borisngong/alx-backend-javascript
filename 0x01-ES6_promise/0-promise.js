@@ -7,7 +7,7 @@ export default function getResponseFromAPI() {
         body: 'Success',
       });
     } else {
-      reject(new Error('Bad return'))
+      reject(new Error('Bad return'));
     }
   });
 }
