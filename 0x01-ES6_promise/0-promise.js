@@ -7,10 +7,7 @@ export default function getResponseFromAPI() {
         body: 'Success',
       });
     } else {
-      reject({
-        status: 500,
-        body: 'Error',
-      });
+      reject(new Error('Bad return'))
     }
   });
 }
