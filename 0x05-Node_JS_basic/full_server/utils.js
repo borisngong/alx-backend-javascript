@@ -1,24 +1,45 @@
 import fs from "fs";
-import path from "path";
 
-export const readDatabase = (filePath) => {
-  return new Promise((resolve, reject) => {
-    fs.readFile(path.resolve(filePath), "utf-8", (err, data) => {
-      if (err) {
-        return reject(err);
-      }
-      const lines = data.split("\n").slice(1); // Skip header
-      const students = {};
-      lines.forEach((line) => {
-        const [firstname, major] = line.split(",");
-        if (firstname && major) {
-          if (!students[major]) {
-            students[major] = [];
+const readDatabase = (dataPath) =>
+  new Promise((resolve, reject) => {
+    if (!dataPath) {
+      reject(new Error("Cannot load the database"));
+    }
+    if (dataPath) {
+      fs.readFile(dataPath, (err, data) => {
+        if (err) {
+          reject(new Error("Cannot load the database"));
+        }
+        if (data) {
+          const fileLines = data.toString("utf-8").trim().split("\n");
+          const studentGroups = {};
+          const dbFieldNames = fileLines[0].split(",");
+          const studentPropNames = dbFieldNames.slice(
+            0,
+            dbFieldNames.length - 1
+          );
+
+          for (const line of fileLines.slice(1)) {
+            const studentRecord = line.split(",");
+            const studentPropValues = studentRecord.slice(
+              0,
+              studentRecord.length - 1
+            );
+            const field = studentRecord[studentRecord.length - 1];
+            if (!Object.keys(studentGroups).includes(field)) {
+              studentGroups[field] = [];
+            }
+            const studentEntries = studentPropNames.map((propName, idx) => [
+              propName,
+              studentPropValues[idx],
+            ]);
+            studentGroups[field].push(Object.fromEntries(studentEntries));
           }
-          students[major].push(firstname);
+          resolve(studentGroups);
         }
       });
-      resolve(students);
-    });
+    }
   });
-};
+
+export default readDatabase;
+module.exports = readDatabase;
